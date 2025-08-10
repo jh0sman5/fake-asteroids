@@ -5,10 +5,14 @@ from constants import *
 from player import Player
 
 def main():
+    updateable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()    
+    Player.containers = (updateable, drawable)
     pygame.init()
     clock = pygame.time.Clock()
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), PLAYER_RADIUS)
     dt = 0
+    direction = 0
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     while True: 
@@ -16,7 +20,10 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill((0, 0, 0))
-        player.draw(screen)
+        updateable.update(dt, direction)
+        for x in drawable:
+            x.draw(screen)
+   
         pygame.display.flip()
         clock.tick(60)
         dt = clock.tick(60) / 1000
